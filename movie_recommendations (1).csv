@@ -1,0 +1,5 @@
+UserID,UserName,Age,Gender,Location,FavoriteGenre,RecentWatch,WatchFrequency,PreferredLanguage,RecommendedMovie1,RecommendedMovie2,RecommendationScore,MatchAlgorithm,SubscriptionType,LastLogin
+1,Alice,28,Female,New York,Sci-Fi,Inception,Daily,English,Interstellar,The Matrix,95,AI-Match v1.2,Premium,2025-04-28
+2,Bob,35,Male,San Francisco,Action,John Wick,Weekly,English,Mad Max: Fury Road,Die Hard,89,AI-Match v1.2,Standard,2025-04-27
+3,Charlie,22,Non-binary,Chicago,Comedy,Superbad,Monthly,English,The Hangover,21 Jump Street,78,AI-Match v1.2,Basic,2025-04-25
+4,Diana,41,Female,Los Angeles,Drama,The Godfather,Weekly,Spanish,The Shawshank Redemption,Forrest Gump,92,AI-Match v1.2,Premium,2025-04-26
