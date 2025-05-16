@@ -1,0 +1,61 @@
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.neighbors import NearestNeighbors
+
+# Load dataset
+df = pd.read_csv("movie_recommendations.csv")
+
+# Select features for matchmaking
+features = ['Age', 'Gender', 'Location', 'FavoriteGenre', 'WatchFrequency', 'PreferredLanguage']
+df_features = df[features].copy()
+
+# Encode categorical variables
+label_encoders = {}
+for col in df_features.select_dtypes(include='object'):
+    le = LabelEncoder()
+    df_features[col] = le.fit_transform(df_features[col])
+    label_encoders[col] = le
+
+# Fit KNN model for similarity matching
+knn = NearestNeighbors(n_neighbors=3, metric='euclidean')
+knn.fit(df_features)
+
+# Recommendation function
+def recommend_movies(user_input):
+    # Encode input
+    encoded_input = {}
+    for col in user_input:
+        if col in label_encoders:
+            encoded_input[col] = label_encoders[col].transform([user_input[col]])[0]
+        else:
+            encoded_input[col] = user_input[col]
+    input_df = pd.DataFrame([encoded_input])
+
+    # Find similar users
+    _, indices = knn.kneighbors(input_df)
+    similar_users = df.iloc[indices[0]]
+
+    # Aggregate recommended movies
+    recommendations = pd.concat([
+        similar_users['RecommendedMovie1'],
+        similar_users['RecommendedMovie2']
+    ]).value_counts().head(5)
+
+    return recommendations.index.tolist()
+
+# Example usage
+if __name__ == "__main__":
+    new_user = {
+        'Age': 29,
+        'Gender': 'Female',
+        'Location': 'New York',
+        'FavoriteGenre': 'Sci-Fi',
+        'WatchFrequency': 'Weekly',
+        'PreferredLanguage': 'English'
+    }
+
+    recommended_movies = recommend_movies(new_user)
+
+    print("🎬 Top Movie Recommendations for You:")
+    for movie in recommended_movies:
+        print("-", movie)
